@@ -1,0 +1,1 @@
+0.9.6-alpha: traducción opcional con consentimiento, caché y gestión de errores; formulario visible de comentarios y calificaciones; borradores locales y comprobación de elegibilidad por paquete y firma.
