@@ -1,0 +1,1 @@
+Kivo Store reúne catálogos de F-Droid y GitHub. Descubre proyectos, consulta estrellas y gestiona descargas y actualizaciones. Incluye colecciones por necesidades, traducción opcional al español y comentarios públicos mediante GitHub. Versión alfa en desarrollo. La instalación siempre requiere confirmación de Android.
