@@ -1,0 +1,46 @@
+/* Kivo 0.9.5: visual catalogue, independent from operational download/update rows. */
+#kivo-app .list{display:block;padding:0;border:0}
+#kivo-app .app-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
+#kivo-app .store-card.row{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;min-width:0;box-shadow:0 4px 16px #1e103704}
+#kivo-app .store-card .row-open{display:flex;flex-direction:column;align-items:stretch;gap:0;width:100%;padding:0;min-width:0;text-align:left;flex:1}
+#kivo-app .store-cover{display:flex;position:relative;align-items:center;justify-content:center;min-height:136px;background:linear-gradient(145deg,var(--soft),var(--tint));padding:17px 15px 36px;overflow:hidden}
+#kivo-app .store-cover:before,#kivo-app .rail-cover:before{content:'';position:absolute;width:105px;height:105px;border-radius:50%;border:1px solid color-mix(in srgb,var(--violet) 9%,transparent);right:-38px;top:-32px;pointer-events:none}
+#kivo-app .store-card .store-cover .icon{width:76px;height:76px;border-radius:21px;flex-shrink:0;background:var(--paper);box-shadow:0 7px 20px #2114310b}
+#kivo-app .store-cover .icon img,#kivo-app .rail-cover .icon img{padding:7px;border-radius:20px;object-fit:contain}
+#kivo-app .cover-source{position:absolute;bottom:11px;left:13px;right:13px;text-align:center;font-size:10px;font-weight:500;letter-spacing:.1px;color:var(--sub);white-space:normal}
+#kivo-app .store-card .store-copy{padding:14px 14px 8px;min-width:0;width:100%;flex:1}
+#kivo-app .store-card .store-copy strong{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.35;font-weight:650;color:var(--ink);letter-spacing:-.2px;overflow-wrap:anywhere;min-height:38px;white-space:normal}
+#kivo-app .store-card .store-category{display:block;font-size:11px;color:var(--sub);margin:5px 0;white-space:normal}
+#kivo-app .store-card .github-stars{font-size:11px;margin:5px 0 0}
+#kivo-app .store-card .installed-badge{font-size:11px;line-height:1.4;margin:5px 0 0}
+#kivo-app .store-footer{display:flex;align-items:center;gap:7px;justify-content:space-between;padding:0 13px 13px}
+#kivo-app .store-footer .source-label{font-size:10px;line-height:1.35;color:var(--sub);flex:1;min-width:0;margin:0}
+#kivo-app .store-footer .get{background:var(--tint);color:var(--violet);border:0;border-radius:17px;min-width:45px;min-height:36px;padding:7px 11px;font-size:11px}
+#kivo-app .store-card-wide{grid-column:1/-1}
+#kivo-app .store-card-wide .row-open{display:grid;grid-template-columns:118px minmax(0,1fr);align-items:stretch}
+#kivo-app .store-card-wide .store-cover{min-height:152px;height:100%;padding:18px 13px 36px}
+#kivo-app .store-card-wide .store-copy{padding:18px 15px 12px}
+#kivo-app .store-card-wide .store-copy strong{font-size:17px;min-height:0}
+#kivo-app .store-description{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px;line-height:1.6;color:var(--sub);margin:8px 0}
+#kivo-app .store-card-wide .store-footer{padding:10px 14px;border-top:1px solid var(--line)}
+#kivo-app .feed-grid.app-rail{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:148px;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:1px 0 13px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#kivo-app .feed-grid.app-rail::-webkit-scrollbar{display:none}
+#kivo-app .app-rail-card.feed-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:20px;background:var(--paper);overflow:hidden;scroll-snap-align:start;min-width:0}
+#kivo-app .rail-cover{display:flex;position:relative;width:100%;min-height:126px;align-items:center;justify-content:center;padding:16px 14px 31px;background:linear-gradient(150deg,var(--soft),var(--tint));overflow:hidden}
+#kivo-app .app-rail-card .rail-cover .icon{width:68px;height:68px;margin:0;display:flex;background:var(--paper);border-radius:19px;box-shadow:0 6px 16px #21143108}
+#kivo-app .rail-copy{padding:12px;display:block;min-width:0;width:100%}
+#kivo-app .app-rail-card strong{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;line-height:1.4;font-weight:600;min-height:36px;overflow-wrap:anywhere}
+#kivo-app .app-rail-card small{font-size:11px;margin:5px 0 0;line-height:1.4}
+#kivo-app .home-feed{border:0;padding:0 0 4px}
+#kivo-app .home-feed .section-head{margin-top:25px;margin-bottom:13px}
+#kivo-app .needs-hero{background:linear-gradient(120deg,var(--tint),var(--soft));border:0;border-radius:24px;padding:22px;min-height:0}
+#kivo-app .needs-hero h1{font-size:29px;max-width:none;line-height:1.14;letter-spacing:-1px;margin:12px 0 9px}
+#kivo-app .needs-hero>p{font-size:12px;line-height:1.6}
+#kivo-app .practical{margin:22px 0 14px}
+#kivo-app .practical-grid{gap:10px}
+#kivo-app .practical-grid button{padding:13px 11px;border-radius:16px;background:var(--soft);border:0;min-height:63px}
+#kivo-app .practical-grid button>svg:first-child{color:var(--violet);width:22px;height:22px}
+@media(min-width:600px){#kivo-app .app-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#kivo-app .store-card-wide{grid-column:span 2}#kivo-app .feed-grid.app-rail{grid-auto-columns:174px}#kivo-app .rail-cover{min-height:146px}}
+@media(min-width:900px){#kivo-app .app-grid{grid-template-columns:repeat(4,minmax(0,1fr))}#kivo-app main{max-width:1100px;margin:auto}}
+@media(max-width:360px){#kivo-app .app-grid{gap:11px}#kivo-app .store-card .store-copy{padding:12px 11px 7px}#kivo-app .store-cover{min-height:122px;padding:14px 11px 32px}#kivo-app .store-card .store-cover .icon{width:65px;height:65px;border-radius:18px}#kivo-app .store-card-wide .row-open{grid-template-columns:100px minmax(0,1fr)}#kivo-app .store-card-wide .store-cover{min-height:143px}#kivo-app .store-footer{padding-left:10px;padding-right:10px}#kivo-app .store-footer .get{min-width:42px;padding-left:10px;padding-right:10px}#kivo-app .feed-grid.app-rail{grid-auto-columns:140px}}
+@media(prefers-reduced-motion:no-preference){#kivo-app .store-card .row-open,#kivo-app .app-rail-card{transition:transform .16s ease}#kivo-app .store-card .row-open:active,#kivo-app .app-rail-card:active{transform:scale(.98)}}
