@@ -1,0 +1,8 @@
+package app.kivo.store;
+import java.util.*;import java.io.*;import org.json.*;
+/** Unicode-safe network limits and provider result validation. */
+final class TranslationText {
+ static String limit(String text,int points){int end=text.offsetByCodePoints(0,Math.min(points,text.codePointCount(0,text.length())));return text.substring(0,end);}
+ static List<String> chunks(String text,int maxBytes)throws Exception{if(maxBytes<4)throw new IllegalArgumentException();List<String> parts=new ArrayList<>();int start=0;while(start<text.length()){int end=start,bytes=0,lastSpace=-1;while(end<text.length()){int cp=text.codePointAt(end),length=new String(Character.toChars(cp)).getBytes("UTF-8").length;if(bytes+length>maxBytes)break;bytes+=length;end+=Character.charCount(cp);if(Character.isWhitespace(cp))lastSpace=end;}if(end<text.length()&&lastSpace>start+(end-start)/2)end=lastSpace;if(end<=start)throw new IOException("No se pudo preparar el texto.");String part=text.substring(start,end);if(!part.trim().isEmpty())parts.add(part);start=end;}return parts;}
+ static String response(JSONObject data)throws Exception{if(data.optBoolean("quotaFinished")||data.optInt("responseStatus")==429||data.optString("responseDetails").toUpperCase(Locale.ROOT).contains("LIMIT"))throw new IOException("Se alcanzó el límite gratuito de traducción. Inténtalo más tarde.");if(data.optInt("responseStatus")!=200)throw new IOException("El servicio no pudo traducir desde el idioma elegido. Comprueba el idioma original.");JSONObject response=data.optJSONObject("responseData");String text=response==null?"":response.optString("translatedText").trim();if(text.isEmpty()||text.length()>64000)throw new IOException("El traductor no devolvió texto válido.");return text;}
+}
