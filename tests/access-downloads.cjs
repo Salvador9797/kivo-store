@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),fs=require('fs'),path=require('path'),{JSDOM,VirtualConsole}=require('jsdom');
+const calls=[],errors=[];let accepted=false;const vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
+const dom=new JSDOM(fs.readFileSync(path.join(__dirname,'../app/src/main/assets/index.html'),'utf8'),{url:'https://kivo.local/',runScripts:'dangerously',virtualConsole:vc,beforeParse(w){w.matchMedia=()=>({matches:false});w.scrollTo=()=>{};w.confirm=()=>accepted;w.KivoNative=new Proxy({},{get:(_,k)=>(...a)=>calls.push([k,...a])});}});
+const w=dom.window,d=w.document,click=s=>{assert(d.querySelector(s),s);d.querySelector(s).click();};
+const github={repo:'owner/app',name:'Test',source:'github',version:'2.0',available:true,indexed:false,assets:[{id:17,name:'app.apk',size:10000}]};
+w.KivoReceive('catalog',[github]);click('[data-repo="owner/app"]');click('[data-asset="17"]');assert(!calls.some(x=>x[0]==='download'),'Cancel must not enqueue');accepted=true;click('[data-asset="17"]');assert.deepEqual(calls.at(-1),['download','owner/app',17]);
+click('[data-back]');w.KivoReceive('fdroid',[{repo:'fdroid/org.test.app',package:'org.test.app',name:'F-Droid Test',source:'fdroid',available:true,indexed:false,assets:[{id:19,name:'test.apk',size:10000}]}]);click('[data-repo="fdroid/org.test.app"]');click('[data-asset="19"]');assert.deepEqual(calls.at(-1),['download','fdroid/org.test.app',19]);
+w.KivoReceive('navigate','downloads');assert(d.querySelector('#screen').textContent.includes('Descargas'));
+click('[data-account]');w.KivoReceive('auth',{connected:false,pending:true,login:''});assert.match(d.querySelector('#screen').textContent,/pendiente/);
+w.KivoReceive('auth',{connected:true,pending:false,login:'sample-user'});assert.match(d.querySelector('#screen').textContent,/Conectado como sample-user/);assert(!d.querySelector('[data-login]'));assert(d.querySelector('[data-logout]'));
+w.KivoReceive('auth',{connected:false,pending:false,login:''});assert(d.querySelector('[data-login]'));assert(!d.querySelector('[data-logout]'));assert.equal(errors.length,0,errors.join('\n'));dom.window.close();
+console.log('PASS: cancellation, GitHub/F-Droid download routing, downloads view, pending profile, connected username and logout.');
