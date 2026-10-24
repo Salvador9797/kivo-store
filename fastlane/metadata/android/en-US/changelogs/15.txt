@@ -1,0 +1,1 @@
+0.9.6-alpha: optional translation with consent, local caching and error handling; visible review composer and 1–5 ratings; durable local drafts and review eligibility checked using installed package and signing certificate.
