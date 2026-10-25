@@ -37,6 +37,7 @@ final class RemoteApk {
   }
   if(!pkg.matches("[A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)+")||low<0||low>0xffffffffL||high>0x7fffffffL)throw new IOException("No se pudo identificar el paquete y su versión real.");return new Identity(pkg,version,(high<<32)|low,sdk);
  }
+ static boolean assetUrl(String repo,String raw){String prefix="https://github.com/"+repo+"/releases/download/";return raw!=null&&raw.regionMatches(true,0,prefix,0,prefix.length());}
  static boolean allowed(URL url){String h=url.getHost().toLowerCase(Locale.ROOT);return "https".equals(url.getProtocol())&&(url.getPort()==-1||url.getPort()==443)&&url.getUserInfo()==null&&(h.equals("github.com")||h.equals("release-assets.githubusercontent.com")||h.equals("objects.githubusercontent.com")||h.equals("github-releases.githubusercontent.com"));}
  static final class HttpSource implements Source {
   URL url;final long total,started=System.currentTimeMillis();long transferred;byte[] whole;
