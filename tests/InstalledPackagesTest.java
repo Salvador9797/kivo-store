@@ -8,6 +8,7 @@ public class InstalledPackagesTest {
  source=new Fake();source.failAll=true;result=new InstalledPackages<>(source).collect(Arrays.asList("org.tracked.app"));check(result.packages.size()==3&&result.sourceFailures==1,"Launcher and tracked lookups recover when enumeration fails");
  source=new Fake();source.failLauncher=true;result=new InstalledPackages<>(source).collect(Collections.emptyList());check(result.packages.size()==2&&result.sourceFailures==1,"Launcher failure preserves main inventory");
  source=new Fake();source.all=Collections.emptyList();source.failLauncher=true;result=new InstalledPackages<>(source).collect(Arrays.asList("org.tracked.app","org.missing"));check(result.packages.size()==1&&result.packages.containsKey("org.tracked.app"),"Known packages are individually confirmed with Android");
+ source=new Fake();source.all=Collections.emptyList();source.failLauncher=true;result=new InstalledPackages<>(source).collect(Arrays.asList("org.external.app"));check(result.packages.containsKey("org.external.app"),"Opening a known catalog package recognizes an external APK even without launcher enumeration or Kivo download history");
  System.out.println("PASS: inventory source fallback, external installs, one bad entry isolation, deduplication and downloaded/uninstalled distinction.");
  }
 }
