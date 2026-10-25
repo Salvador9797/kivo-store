@@ -1,0 +1,1 @@
+0.9.8-alpha: identifica automáticamente el paquete y el código de versión del APK mediante lecturas parciales HTTPS; consulta Android para mostrar Abrir, Actualizar o Descargar. Retira la vinculación manual. Las consultas públicas de GitHub se recuperan sin sesión tras HTTP 401. No confunde errores de comprobación con una app ausente.
