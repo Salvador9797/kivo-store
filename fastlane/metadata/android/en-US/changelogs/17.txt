@@ -1,0 +1,1 @@
+0.9.8-alpha: identify real APK package/versionCode using bounded anonymous HTTPS ranges, then query Android to show Open, Update or Download. Remove manual linking. Recover public GitHub reads anonymously after HTTP 401. Inspection errors never imply that an app is absent.
