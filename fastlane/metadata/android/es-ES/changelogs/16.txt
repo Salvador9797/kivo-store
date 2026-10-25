@@ -1,0 +1,1 @@
+0.9.7-alpha: el formulario se cierra solo tras confirmar la publicación; conserva el borrador al cancelar o fallar; evita envíos repetidos. Reconoce instalaciones externas por su paquete, conserva ese dato al actualizar fichas de GitHub y permite vincular apps cuando falta el identificador.
