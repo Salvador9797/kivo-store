@@ -1,0 +1,1 @@
+0.9.7-alpha: close the review composer only after confirmed publication; retain drafts on cancellation or failure and prevent duplicate submits. Recognize externally installed packages, retain package identity after GitHub refresh, and offer explicit local linking when metadata is missing.
