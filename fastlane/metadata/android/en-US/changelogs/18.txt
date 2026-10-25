@@ -1,0 +1,1 @@
+0.9.8: regular release without the alpha label. Includes automatic installed-app detection, public GitHub session recovery and review fixes.
