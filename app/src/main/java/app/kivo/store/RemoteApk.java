@@ -1,0 +1,51 @@
+package app.kivo.store;
+import java.io.*;import java.net.*;import java.nio.charset.*;import java.util.*;import java.util.zip.*;
+/** Bounded, anonymous ZIP range reads. Metadata identifies a package; it is not an APK signature audit. */
+final class RemoteApk {
+ interface Source {long size();byte[] read(long offset,int length)throws Exception;}
+ static final class Identity {final String pkg,version;final long code;final int minSdk;Identity(String p,String v,long c,int s){pkg=p;version=v;code=c;minSdk=s;}}
+ static int u16(byte[] b,int p)throws IOException{bounds(b,p,2);return (b[p]&255)|((b[p+1]&255)<<8);}
+ static long u32(byte[] b,int p)throws IOException{bounds(b,p,4);return ((long)(b[p]&255))|((long)(b[p+1]&255)<<8)|((long)(b[p+2]&255)<<16)|((long)(b[p+3]&255)<<24);}
+ static int num(byte[] b,int p)throws IOException{long n=u32(b,p);if(n>Integer.MAX_VALUE)throw new IOException("Tamaño de metadatos no válido.");return (int)n;}
+ static void bounds(byte[] b,int p,int n)throws IOException{if(p<0||n<0||p>b.length-n)throw new IOException("Metadatos APK incompletos.");}
+ static byte[] exact(Source source,long off,int n)throws Exception{if(off<0||n<0||n>4*1024*1024||off>source.size()-n)throw new IOException("Rango APK no válido.");byte[] b=source.read(off,n);if(b.length!=n)throw new IOException("Respuesta APK incompleta.");return b;}
+ static Identity inspect(Source source)throws Exception{
+  long total=source.size();if(total<22||total>500L*1024*1024)throw new IOException("Tamaño de APK no admitido.");int tailSize=(int)Math.min(total,65557);byte[] tail=exact(source,total-tailSize,tailSize);int end=-1;
+  for(int i=tail.length-22;i>=0;i--)if(u32(tail,i)==0x06054b50L&&i+22+u16(tail,i+20)==tail.length){end=i;break;}
+  if(end<0||u16(tail,end+4)!=0||u16(tail,end+6)!=0||u16(tail,end+8)!=u16(tail,end+10)||u16(tail,end+10)==65535)throw new IOException("El formato ZIP del APK no se puede comprobar.");
+  long centralOff=u32(tail,end+16);int centralSize=num(tail,end+12);if(centralOff+centralSize>total-tailSize+end)throw new IOException("Directorio APK no válido.");byte[] cd=exact(source,centralOff,centralSize);int entries=u16(tail,end+10),pos=0;long offset=-1,crc=0;int method=0,compressed=0,uncompressed=0,flags=0;
+  for(int i=0;i<entries;i++){bounds(cd,pos,46);if(u32(cd,pos)!=0x02014b50L)throw new IOException("Directorio ZIP dañado.");int nl=u16(cd,pos+28),el=u16(cd,pos+30),cl=u16(cd,pos+32);bounds(cd,pos+46,nl+el+cl);String name=new String(cd,pos+46,nl,StandardCharsets.UTF_8);if("AndroidManifest.xml".equals(name)){if(offset>=0)throw new IOException("Manifiesto duplicado.");flags=u16(cd,pos+8);method=u16(cd,pos+10);crc=u32(cd,pos+16);compressed=num(cd,pos+20);uncompressed=num(cd,pos+24);offset=u32(cd,pos+42);}pos+=46+nl+el+cl;}
+  if(offset<0||compressed<1||compressed>2*1024*1024||uncompressed<8||uncompressed>4*1024*1024||(flags&1)!=0||!(method==0||method==8))throw new IOException("Manifiesto APK no admitido.");
+  byte[] header=exact(source,offset,30);if(u32(header,0)!=0x04034b50L||u16(header,8)!=method||(u16(header,6)&1)!=0)throw new IOException("Cabecera APK no válida.");int nameLen=u16(header,26),extraLen=u16(header,28);if(offset+30+nameLen+extraLen+compressed>centralOff)throw new IOException("Entrada de manifiesto no válida.");byte[] name=exact(source,offset+30,nameLen);if(!"AndroidManifest.xml".equals(new String(name,StandardCharsets.UTF_8)))throw new IOException("Entrada APK incorrecta.");byte[] packed=exact(source,offset+30+nameLen+extraLen,compressed),xml;
+  if(method==0)xml=packed;else{Inflater inflater=new Inflater(true);try{inflater.setInput(packed);xml=new byte[uncompressed];int n=0;while(n<xml.length&&!inflater.finished()){int got=inflater.inflate(xml,n,xml.length-n);if(got==0)break;n+=got;}if(n!=xml.length||!inflater.finished())throw new IOException("Manifiesto comprimido no válido.");}finally{inflater.end();}}
+  CRC32 checksum=new CRC32();checksum.update(xml);if(xml.length!=uncompressed||checksum.getValue()!=crc)throw new IOException("El manifiesto APK no pasó la comprobación de integridad.");return manifest(xml);
+ }
+ static int[] length8(byte[] b,int p)throws IOException{bounds(b,p,1);int n=b[p++]&255;if((n&128)!=0){bounds(b,p,1);n=((n&127)<<8)|(b[p++]&255);}return new int[]{n,p};}
+ static String[] pool(byte[] data,int start,int header,int size)throws Exception{if(header<28)throw new IOException("Tabla de texto APK no válida.");int count=num(data,start+8),flags=num(data,start+16),strings=num(data,start+20);if(count>50000||strings<header||strings>size)throw new IOException("Tabla de texto APK demasiado grande.");bounds(data,start+header,count*4);String[] out=new String[count];for(int i=0;i<count;i++){int offset=num(data,start+header+i*4);if(offset>=size-strings)throw new IOException("Índice de texto APK no válido.");int p=start+strings+offset,n;if((flags&256)!=0){int[] first=length8(data,p),second=length8(data,first[1]);n=second[0];p=second[1];if(p+n>=start+size)throw new IOException("Texto APK incompleto.");bounds(data,p,n);out[i]=new String(data,p,n,StandardCharsets.UTF_8);}else{n=u16(data,p);p+=2;if((n&32768)!=0){n=((n&32767)<<16)|u16(data,p);p+=2;}if(n>1048576||p+2L*n>=start+size)throw new IOException("Texto APK no válido.");bounds(data,p,2*n);out[i]=new String(data,p,2*n,StandardCharsets.UTF_16LE);}}return out;}
+ static String str(String[] pool,long index)throws IOException{if(index==0xffffffffL)return "";if(pool==null||index<0||index>=pool.length)throw new IOException("Referencia APK no válida.");return pool[(int)index];}
+ static Identity manifest(byte[] xml)throws Exception{
+  if(u16(xml,0)!=3||u16(xml,2)!=8||num(xml,4)!=xml.length)throw new IOException("Manifiesto Android no válido.");String[] strings=null;String pkg="",version="";long low=-1,high=0;int sdk=1;
+  for(int pos=8;pos<xml.length;){bounds(xml,pos,8);int type=u16(xml,pos),header=u16(xml,pos+2),size=num(xml,pos+4);if(header<8||size<header)throw new IOException("Bloque XML no válido.");bounds(xml,pos,size);
+   if(type==1)strings=pool(xml,pos,header,size);
+   if(type==0x0102){if(header!=16||size<36)throw new IOException("Elemento XML no válido.");String node=str(strings,u32(xml,pos+20));int start=u16(xml,pos+24),width=u16(xml,pos+26),count=u16(xml,pos+28);if(width<20||count>4096||start<20||16L+start+(long)width*count>size)throw new IOException("Atributos APK no válidos.");
+    for(int i=0;i<count;i++){int a=pos+16+start+width*i;String ns=str(strings,u32(xml,a)),name=str(strings,u32(xml,a+4));long raw=u32(xml,a+8),value=u32(xml,a+16);int kind=xml[a+15]&255;String text=raw!=0xffffffffL?str(strings,raw):kind==3?str(strings,value):"";boolean android="http://schemas.android.com/apk/res/android".equals(ns);
+     if(node.equals("manifest")&&name.equals("package")&&ns.isEmpty())pkg=text;
+     if(node.equals("manifest")&&android&&name.equals("versionName"))version=text;
+     if(android&&(kind==16||kind==17||kind==3)){long number;if(kind==3){try{number=Long.parseLong(text);}catch(Exception e){continue;}}else number=value;if(node.equals("manifest")&&name.equals("versionCode"))low=number;if(node.equals("manifest")&&name.equals("versionCodeMajor"))high=number;if(node.equals("uses-sdk")&&name.equals("minSdkVersion")&&number<=Integer.MAX_VALUE)sdk=(int)number;}
+    }
+   }pos+=size;
+  }
+  if(!pkg.matches("[A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)+")||low<0||low>0xffffffffL||high>0x7fffffffL)throw new IOException("No se pudo identificar el paquete y su versión real.");return new Identity(pkg,version,(high<<32)|low,sdk);
+ }
+ static boolean allowed(URL url){String h=url.getHost().toLowerCase(Locale.ROOT);return "https".equals(url.getProtocol())&&(url.getPort()==-1||url.getPort()==443)&&url.getUserInfo()==null&&(h.equals("github.com")||h.equals("release-assets.githubusercontent.com")||h.equals("objects.githubusercontent.com")||h.equals("github-releases.githubusercontent.com"));}
+ static final class HttpSource implements Source {
+  URL url;final long total,started=System.currentTimeMillis();long transferred;byte[] whole;
+  HttpSource(String raw,long size)throws Exception{url=new URL(raw);if(!allowed(url)||!url.getHost().equals("github.com")||!url.getPath().contains("/releases/download/"))throw new IOException("Origen APK no válido.");total=size;}
+  public long size(){return total;}
+  public byte[] read(long offset,int length)throws Exception{
+   if(whole!=null)return Arrays.copyOfRange(whole,(int)offset,(int)offset+length);if(System.currentTimeMillis()-started>60000)throw new IOException("La comprobación del APK tardó demasiado.");
+   for(int hop=0;hop<7;hop++){if(!allowed(url))throw new IOException("Redirección de APK no admitida.");HttpURLConnection c=(HttpURLConnection)url.openConnection();c.setInstanceFollowRedirects(false);c.setConnectTimeout(8000);c.setReadTimeout(12000);c.setRequestProperty("User-Agent","Kivo-Store/0.9.8");c.setRequestProperty("Accept-Encoding","identity");c.setRequestProperty("Range","bytes="+offset+"-"+(offset+length-1));try{int code=c.getResponseCode();if(code==301||code==302||code==303||code==307||code==308){String target=c.getHeaderField("Location");if(target==null)throw new IOException("Redirección vacía.");url=new URL(url,target);continue;}int expected;if(code==206){String range=c.getHeaderField("Content-Range");if(!("bytes "+offset+"-"+(offset+length-1)+"/"+total).equals(range))throw new IOException("El servidor devolvió otro rango del APK.");expected=length;}else if(code==200&&total<=8*1024*1024)expected=(int)total;else throw new IOException(code==200?"El servidor no permite comprobar este APK por partes.":"No se pudieron comprobar los datos del APK (HTTP "+code+").");if(transferred+expected>12*1024*1024)throw new IOException("Se alcanzó el límite de metadatos del APK.");byte[] bytes=new byte[expected];try(InputStream in=c.getInputStream()){int done=0,n;while(done<bytes.length&&(n=in.read(bytes,done,bytes.length-done))!=-1)done+=n;if(done!=bytes.length||in.read()!=-1)throw new IOException("Lectura parcial incompleta.");}transferred+=bytes.length;if(code==200){whole=bytes;return Arrays.copyOfRange(whole,(int)offset,(int)offset+length);}return bytes;}finally{c.disconnect();}}
+   throw new IOException("Demasiadas redirecciones del APK.");
+  }
+ }
+}
