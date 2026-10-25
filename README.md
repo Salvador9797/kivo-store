@@ -4,11 +4,15 @@
 
 Una tienda de aplicaciones para Android que reúne F-Droid y proyectos de GitHub en una interfaz sencilla.
 
-**Versión: 0.9.6-alpha · Android 8.0 o posterior · app.kivo.store**
+**Versión: 0.9.7-alpha · Android 8.0 o posterior · app.kivo.store**
 
 ## Descarga
 
 El APK firmado se publica en [Releases](https://github.com/Salvador9797/kivo-store/releases). Es una versión alfa: todavía puede contener errores. Las instalaciones y actualizaciones requieren la confirmación de Android.
+
+## Cambios en 0.9.7-alpha
+
+El formulario confirma la publicación, cierra el cuadro y elimina el borrador únicamente tras la respuesta de GitHub. Los errores y cancelaciones conservan el texto. Las instalaciones externas se reconocen por el paquete Android, conservado al resolver fichas de GitHub; cuando la fuente no lo declara, la ficha permite vincular explícitamente una app instalada. La actualización mantiene las comprobaciones de paquete y certificado.
 
 ## Qué ofrece
 

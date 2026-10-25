@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "node tests/ui.cjs && node tests/improvements.cjs && node tests/regressions.cjs && node tests/features.cjs && node tests/sources.cjs && node tests/feeds-viewer.cjs && node tests/simple-needs.cjs && node tests/updates-community.cjs && node tests/access-downloads.cjs && node tests/installed-detection.cjs && node tests/download-install-state.cjs && node tests/translation-reviews.cjs"
+    "test": "node tests/ui.cjs && node tests/improvements.cjs && node tests/regressions.cjs && node tests/features.cjs && node tests/sources.cjs && node tests/feeds-viewer.cjs && node tests/simple-needs.cjs && node tests/updates-community.cjs && node tests/access-downloads.cjs && node tests/installed-detection.cjs && node tests/download-install-state.cjs && node tests/translation-reviews.cjs && node tests/review-installed-regressions.cjs"
   },
   "devDependencies": {
     "jsdom": "26.1.0"
