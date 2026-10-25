@@ -1,0 +1,1 @@
+0.9.8: publicación sin etiqueta alfa. Conserva la detección automática de aplicaciones, recuperación de consultas públicas de GitHub y correcciones de reseñas.
