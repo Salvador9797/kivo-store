@@ -4,13 +4,13 @@
 
 Una tienda de aplicaciones para Android que reúne F-Droid y proyectos de GitHub en una interfaz sencilla.
 
-**Versión: 0.9.8-alpha · Android 8.0 o posterior · app.kivo.store**
+**Versión: 0.9.8 · Android 8.0 o posterior · app.kivo.store**
 
 ## Descarga
 
-El APK firmado se publica en [Releases](https://github.com/Salvador9797/kivo-store/releases). Es una versión alfa: todavía puede contener errores. Las instalaciones y actualizaciones requieren la confirmación de Android.
+El APK firmado se publica en [Releases](https://github.com/Salvador9797/kivo-store/releases). Las instalaciones y actualizaciones requieren la confirmación de Android.
 
-## Cambios en 0.9.8-alpha
+## Cambios en 0.9.8
 
 Al abrir una ficha de GitHub, Kivo lee automáticamente el paquete y el código de versión del manifiesto real del APK mediante solicitudes HTTPS Range limitadas. Después consulta ese paquete directamente a Android. La acción principal ofrece Abrir, Actualizar o Descargar según el resultado, sin depender del historial de descargas y sin vinculación manual. Mientras comprueba, o si falla la comprobación, no asume que la app está ausente.
 
@@ -42,7 +42,7 @@ chmod +x gradlew
 ./gradlew :app:assembleRelease
 ```
 
-La compilación Gradle genera un APK sin firmar. La clave privada de desarrollo no forma parte de este repositorio. El APK alfa publicado fue compilado mediante `tools/build.py` con las herramientas del SDK y ECJ; el script documenta ese procedimiento. No se afirma que el resultado de ambos procedimientos sea idéntico bit a bit.
+La compilación Gradle genera un APK sin firmar. La clave privada de desarrollo no forma parte de este repositorio. El APK publicado fue compilado mediante `tools/build.py` con las herramientas del SDK y ECJ; el script documenta ese procedimiento. No se afirma que el resultado de ambos procedimientos sea idéntico bit a bit.
 
 Pruebas de interfaz:
 
@@ -59,7 +59,7 @@ El inventario de apps se consulta localmente. GitHub se usa para catálogo, desc
 
 ## F-Droid
 
-La inclusión en el catálogo oficial requiere revisión independiente. Este repositorio no implica aceptación ni disponibilidad en F-Droid. Se preparan metadatos upstream y una solicitud que identifica el estado alfa y las verificaciones pendientes.
+La inclusión en el catálogo oficial requiere revisión independiente. Este repositorio no implica aceptación ni disponibilidad en F-Droid. Se preparan metadatos upstream y una solicitud que documenta las verificaciones pendientes.
 
 ## Licencias y créditos
 
