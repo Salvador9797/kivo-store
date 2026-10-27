@@ -13,7 +13,7 @@ shutil.copyfile(build/'resources-base.apk',build/'unsigned-final.apk')
 with zipfile.ZipFile(build/'unsigned-final.apk','a',compression=zipfile.ZIP_DEFLATED) as out:
  for p in dexdir.glob('*.dex'):out.write(p,p.name)
 run([tools/'zipalign','-f','-p','4',build/'unsigned-final.apk',build/'aligned.apk'])
-output=root.parent/'deliverables/Kivo-Prueba-Juegos-0.9.12.apk';output.parent.mkdir(exist_ok=True);staging=build/'signed-staging.apk'
+output=root.parent/'deliverables/Kivo-Prueba-Juegos-0.9.13.apk';output.parent.mkdir(exist_ok=True);staging=build/'signed-staging.apk'
 run([tools/'apksigner','sign','--v4-signing-enabled','false','--ks',Path(os.environ.get('KIVO_KEYSTORE',str(root/'private-signing/kivo-alpha.jks'))),'--ks-key-alias','kivo-alpha','--ks-pass','pass:android','--key-pass','pass:android','--out',staging,build/'aligned.apk'])
 with output.open('wb') as out:out.write(staging.read_bytes());out.flush();os.fsync(out.fileno())
 run([tools/'apksigner','verify','--verbose','--print-certs',output]);print(output)

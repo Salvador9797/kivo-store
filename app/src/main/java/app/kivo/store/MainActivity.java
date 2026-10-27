@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
 
  @JavascriptInterface public void inspectInstalled(String raw){try{String slug=repo(raw);installedApps.inspect(slug);inspector.inspect(slug);}catch(Exception ignored){}}
  @JavascriptInterface public void installed(){installedApps.requestScan();}
+ @JavascriptInterface public void uninstallInstalled(String pkg){runOnUiThread(()->{if(!InstalledApps.validPackage(pkg)||!installedApps.installed(pkg)){status("Esta app ya no está instalada. Vuelve a detectar.");installedApps.requestScan();return;}try{startActivity(new Intent(Intent.ACTION_DELETE,Uri.fromParts("package",pkg,null)));}catch(Exception e){status("Android no pudo abrir la desinstalación de esta app.");}});}
  @JavascriptInterface public void openInstalled(String pkg){runOnUiThread(()->{if(!InstalledApps.validPackage(pkg)||!installedApps.installed(pkg)){status("Esta app ya no está instalada. Vuelve a detectar.");installedApps.requestScan();return;}Intent launch=getPackageManager().getLaunchIntentForPackage(pkg);if(launch==null){status("Esta app no tiene una pantalla que se pueda abrir.");return;}try{startActivity(launch);}catch(Exception e){status("Android no pudo abrir esta app.");}});}
  @JavascriptInterface public void checkUpdates(){installedApps.refresh();}
  @JavascriptInterface public void updatePackage(String pkg){notificationPermission();installedApps.download(pkg);}
