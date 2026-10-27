@@ -1,0 +1,7 @@
+const assert=require('node:assert/strict'),fs=require('fs'),path=require('path'),{JSDOM}=require('jsdom');
+const dom=new JSDOM(fs.readFileSync(path.join(__dirname,'../app/src/main/assets/index.html'),'utf8'),{url:'https://kivo.local/',runScripts:'dangerously',beforeParse(w){w.matchMedia=()=>({matches:false});w.scrollTo=()=>{};w.KivoNative=new Proxy({},{get:()=>()=>{}});w.confirm=()=>true;w.HTMLDialogElement.prototype.showModal=function(){this.open=true};w.HTMLDialogElement.prototype.close=function(){this.open=false}}});
+const w=dom.window,d=w.document;
+function app(repo,name,topics,description,source='fdroid'){return {repo,package:'org.example.'+name.toLowerCase(),source,name,topics,description,available:true,indexed:false,assets:[{id:1,name:'game.apk',size:1000}]};}
+const a=app('fdroid/org.example.space','Space',['Games'],'Arcade game');const b=app('dev/puzzle','Puzzle',['android-game'],'Puzzle','github');const c=app('fdroid/org.example.maps','Maps',['Navigation'],'Mapping app');
+w.KivoReceive('fdroid',[a,c]);w.KivoReceive('directory',[b]);
+assert(d.querySelector('[data-collection="games"]'));d.querySelector('[data-collection="games"]').click();const items=[...d.querySelectorAll('[data-repo]')].map(n=>n.dataset.repo);assert(items.includes(a.repo));assert(items.includes(b.repo));assert(!items.includes(c.repo));assert(d.querySelector('#screen').textContent.includes('Juegos'));dom.window.close();console.log('PASS games filter across F-Droid and GitHub');

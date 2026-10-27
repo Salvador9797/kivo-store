@@ -9,7 +9,7 @@ const unknown=app('unknown','Photo Mystery','Photo gallery.');
 const negative=app('negative','Photo Network','Photo gallery. Not ad-free. Does not work offline.');
 const note=app('note','Task Notes','Notes and tasks.',{assets:[{id:2,name:'notes.apk',size:30*1048576}]});
 w.KivoReceive('fdroid',[pdf,gallery,conflict,unknown,negative,note]);
-assert.equal(d.querySelectorAll('[data-collection]').length,4);assert(!d.querySelector('.source-options').open);assert(!d.querySelector('.simple-filters').open);assert(!d.querySelector('[data-source="aurora"]'));
+assert.equal(d.querySelectorAll('[data-collection]').length,5);assert(!d.querySelector('.source-options').open);assert(!d.querySelector('.simple-filters').open);assert(!d.querySelector('[data-source="aurora"]'));
 search('quiero una app para editar PDF sin internet');assert.deepEqual(repos(),[pdf.repo]);assert.match(text(),/solo fichas que lo declaran/);assert.equal(calls.filter(x=>x[0]==='search').length,0);
 search('galería sin anuncios');assert.deepEqual(repos(),[gallery.repo]);
 search('fotos');assert.equal(repos().length,4);click('[data-repo="'+unknown.repo+'"]');assert.match(d.querySelector('.plain-facts').textContent,/Sin confirmar/);assert.doesNotMatch(d.querySelector('.plain-facts').textContent,/Declara que no incluye|Según descripción/);assert(w.KivoBack());
