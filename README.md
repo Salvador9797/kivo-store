@@ -2,9 +2,9 @@
 
 <img src="fastlane/metadata/android/es-ES/images/icon.png" width="96" alt="Icono de Kivo Store">
 
-Una tienda de aplicaciones para Android que reúne F-Droid y proyectos de GitHub en una interfaz sencilla.
+Una tienda de aplicaciones para Android que reúne F-Droid, IzzyOnDroid y proyectos de GitHub en una interfaz sencilla.
 
-**Versión: 0.9.8 · Android 8.0 o posterior · app.kivo.store**
+**Versión: 0.9.13 · Android 8.0 o posterior · app.kivo.store**
 
 ## Descarga
 
@@ -27,11 +27,15 @@ Las consultas públicas de GitHub pueden recuperarse sin autenticación cuando u
 - Descripciones traducidas al español con consentimiento previo mediante MyMemory.
 - Comentarios públicos y calificaciones de 1 a 5 mediante la cuenta de GitHub y el repositorio de comunidad.
 
-## Capturas
+## Vistas previas del nuevo estilo
 
-Capturas de la interfaz web incluida en el APK, renderizada con el catálogo guardado. No son fotografías ni pruebas de instalación en un dispositivo Android; las funciones nativas no se simulan como completadas.
+Inicio, búsqueda por funciones y catálogo de juegos de Kivo 0.9.13.
 
-<img src="fastlane/metadata/android/es-ES/images/phoneScreenshots/1.png" width="260" alt="Inicio de Kivo"> <img src="fastlane/metadata/android/es-ES/images/phoneScreenshots/2.png" width="260" alt="Catálogo de Kivo">
+![Vistas ilustrativas de Inicio, Búsqueda y Juegos](docs/previews/kivo-0.9.13-vistas.png)
+
+Estas imágenes son ilustraciones del diseño, no capturas de un dispositivo. Los nombres, iconos y resultados son ejemplos; la disponibilidad depende del catálogo cargado.
+
+[Descargar Kivo 0.9.13](https://github.com/Salvador9797/kivo-store/releases/tag/v0.9.13)
 
 ## Compilar
 
