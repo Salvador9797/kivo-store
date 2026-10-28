@@ -4,7 +4,7 @@
 
 Una tienda de aplicaciones para Android que reúne F-Droid, IzzyOnDroid y proyectos de GitHub en una interfaz sencilla.
 
-**Versión: 0.9.13 · Android 8.0 o posterior · app.kivo.store**
+**Versión: 0.9.13 · Android 8.0 o posterior · app.kivo.market**
 
 ## Descarga
 
@@ -21,7 +21,7 @@ El APK firmado se publica en [Releases](https://github.com/Salvador9797/kivo-sto
 
 ### Firma de esta distribución
 
-Esta versión usa una nueva firma. No se instala encima de Kivo 0.9.8: desinstalar la antigua elimina sus datos locales. Las futuras actualizaciones de esta distribución conservarán la nueva firma. El código interno de la compilación corregida es 19.
+Esta versión usa una nueva firma. No se instala encima de Kivo 0.9.8: desinstalar la antigua elimina sus datos locales. Las futuras actualizaciones de esta distribución conservarán la nueva firma. Esta distribución utiliza el nuevo paquete `app.kivo.market`, código interno 20, para su publicación en una ficha nueva de APKPure.
 
 ## Qué ofrece
 
