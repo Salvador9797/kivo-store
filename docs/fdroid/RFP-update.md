@@ -20,7 +20,7 @@ Kivo has moved from `app.kivo.store` to **`app.kivo.market`**. Please assess thi
 
 The wrapper JAR SHA-256 is `498495120a03b9a6ab5d155f5de3c8f0d986a449153702fb80fc80e134484f17`, matching https://services.gradle.org/distributions/gradle-8.9-wrapper.jar.sha256. The properties pin the binary distribution SHA-256 `d725d707bfabd4dfdc958c624003b3c80accc03f7037b5122c4b1d0ef15cecab`, matching https://services.gradle.org/distributions/gradle-8.9-bin.zip.sha256. Please reassess the historical `insecure-gradlew` label; upstream does not claim authority to remove F-Droid review labels.
 
-Debug compilation and automated Java/UI tests have passed on GitHub Actions. Upstream CI is being extended to compile the unsigned release variant and explicitly verify the wrapper checksums; the corresponding run must pass before this additional check is considered verified. This is not a build in F-Droid's environment, and bit-for-bit reproducibility is not claimed.
+Debug and unsigned release compilation, explicit wrapper checksum verification and automated Java/UI tests passed on GitHub Actions: https://github.com/Salvador9797/kivo-store/actions/runs/40720553729. This is not a build in F-Droid's environment, and bit-for-bit reproducibility is not claimed.
 
 The application now also connects to IzzyOnDroid and has an experimental itch.io integration. GitHub and itch.io authentication are optional; web games and downloads may rely on proprietary network services or non-free third-party content. Please assess NonFreeNet and whether a separate build flavor or other changes are necessary. Automatic synchronization does not remove the need for this review.
 
