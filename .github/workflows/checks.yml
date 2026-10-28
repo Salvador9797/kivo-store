@@ -39,5 +39,9 @@ jobs:
       - uses: android-actions/setup-android@v3
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+      - name: Verificar wrapper y distribución de Gradle
+        run: |
+          echo '498495120a03b9a6ab5d155f5de3c8f0d986a449153702fb80fc80e134484f17  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check
+          grep -Fx 'distributionSha256Sum=d725d707bfabd4dfdc958c624003b3c80accc03f7037b5122c4b1d0ef15cecab' gradle/wrapper/gradle-wrapper.properties
       - uses: gradle/actions/setup-gradle@v4
-      - run: bash gradlew assembleDebug --no-daemon
+      - run: bash gradlew :app:assembleDebug :app:assembleRelease --no-daemon
