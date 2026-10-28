@@ -50,10 +50,10 @@ public class MainActivity extends Activity {
  @JavascriptInterface public void disconnectItch(){itchAuth.logout();}
  @JavascriptInterface public void loadItch(){loadItchFeed(false);}
  @JavascriptInterface public void loadItchWeb(){loadItchFeed(true);}
- @JavascriptInterface public void itchOpenWeb(int index){openItchItem(index,true);}
- @JavascriptInterface public void itchOpen(int index){openItchItem(index,false);}
- void openItchItem(int index,boolean browser){try{String link=(browser?itchWebItems:itchItems).getJSONObject(index).getString("link");Uri u=Uri.parse(link);String h=u.getHost();if(!"https".equals(u.getScheme())||h==null||!h.toLowerCase(Locale.ROOT).endsWith(".itch.io"))throw new IOException();runOnUiThread(()->startActivity(new Intent(Intent.ACTION_VIEW,u)));}catch(Exception e){status("No se pudo abrir el juego en itch.io.");}}
- @JavascriptInterface public void itchGames(){runOnUiThread(()->startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://itch.io/games/free/platform-android"))));}
+ @JavascriptInterface public void itchOpenWeb(int index){openItchItem(index,true,true);}
+ @JavascriptInterface public void itchOpen(int index){status("Comprobando archivos del juego…");itchGamesClient.open(index);}
+ void openItchItem(int index,boolean browser,boolean webFeed){try{String link=(webFeed?itchWebItems:itchItems).getJSONObject(index).getString("link");Uri u=Uri.parse(link);String h=u.getHost();if(!"https".equals(u.getScheme())||h==null||!h.toLowerCase(Locale.ROOT).endsWith(".itch.io"))throw new IOException();runOnUiThread(()->startActivity(new Intent(MainActivity.this,ItchGameActivity.class).putExtra("url",u.toString())));}catch(Exception e){status("No se pudo abrir el juego dentro de Kivo.");}}
+ @JavascriptInterface public void itchGames(){runOnUiThread(()->startActivity(new Intent(MainActivity.this,ItchGameActivity.class).putExtra("url","https://itch.io/games/free/platform-android")));}
  @JavascriptInterface public void login(){runOnUiThread(()->loginDialog());}
  @JavascriptInterface public void logout(){cancelAuthorization();sessionToken="";prefs.edit().remove("token").remove("tokenIv").remove("login").apply();authState();status("Sesión cerrada en Kivo.");}
  @JavascriptInterface public void resolve(String text){final String slug;try{slug=repo(text);}catch(Exception e){return;}send("resolving",slug);searches.execute(()->{try{sync(slug);publish();inspector.inspect(slug);send("resolved",slug);}catch(Exception e){send("resolveError",newError(slug,e.getMessage()));}finally{send("resolving","");}});}
