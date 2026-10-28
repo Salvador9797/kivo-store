@@ -10,13 +10,18 @@ Una tienda de aplicaciones para Android que reúne F-Droid, IzzyOnDroid y proyec
 
 El APK firmado se publica en [Releases](https://github.com/Salvador9797/kivo-store/releases). Las instalaciones y actualizaciones requieren la confirmación de Android.
 
-## Cambios en 0.9.8
+## Cambios en 0.9.13
 
-Al abrir una ficha de GitHub, Kivo lee automáticamente el paquete y el código de versión del manifiesto real del APK mediante solicitudes HTTPS Range limitadas. Después consulta ese paquete directamente a Android. La acción principal ofrece Abrir, Actualizar o Descargar según el resultado, sin depender del historial de descargas y sin vinculación manual. Mientras comprueba, o si falla la comprobación, no asume que la app está ausente.
+- Nueva presentación de Inicio, juegos en cuadrícula y barra de búsqueda renovada.
+- Búsqueda por nombres parciales y funciones con términos relacionados en español e inglés.
+- Sincronización automática del catálogo al abrir o volver a Kivo: F-Droid e IzzyOnDroid cada 6 horas y consultas limitadas de GitHub cada 12 horas.
+- Corrección de la carga inicial de IzzyOnDroid y de filtros que podían ocultar su catálogo.
+- Mejoras en la detección de apps instaladas, comparación del APK compatible con el dispositivo y progreso de descargas.
+- Integración experimental de juegos de itch.io; disponibilidad y descargas sujetas a su API y a comprobación en dispositivos reales.
 
-La lectura parcial tiene límites de tamaño y formato y requiere un servidor que soporte rangos (o un APK pequeño). Si no puede completarse, la interfaz muestra el error y permite reintentar. La inspección de metadatos no equivale a verificar la firma del APK completo: las comprobaciones de integridad, paquete y certificado siguen realizándose antes de instalar.
+### Firma de esta distribución
 
-Las consultas públicas de GitHub pueden recuperarse sin autenticación cuando una sesión devuelve HTTP 401. El perfil y la publicación de opiniones siguen requiriendo autenticación válida; no se reintentan escrituras como anónimo.
+Esta versión usa una nueva firma. No se instala encima de Kivo 0.9.8: desinstalar la antigua elimina sus datos locales. Las futuras actualizaciones de esta distribución conservarán la nueva firma. El código interno de la compilación corregida es 19.
 
 ## Qué ofrece
 

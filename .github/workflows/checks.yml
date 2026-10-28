@@ -1,0 +1,41 @@
+name: Comprobaciones
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: node tests/search-intent.cjs && node tests/izzy-loading.cjs && node tests/approved-design.cjs && node tests/download-progress.cjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Comprobar versiones y programación del catálogo
+        run: |
+          mkdir -p /tmp/kivo-tests
+          javac -d /tmp/kivo-tests app/src/main/java/app/kivo/store/Versions.java app/src/main/java/app/kivo/store/UpdatePolicy.java app/src/main/java/app/kivo/store/CatalogSchedule.java tests/SelectedVersionTest.java tests/CatalogScheduleTest.java
+          java -cp /tmp/kivo-tests app.kivo.store.SelectedVersionTest
+          java -cp /tmp/kivo-tests app.kivo.store.CatalogScheduleTest
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - run: bash gradlew assembleDebug --no-daemon

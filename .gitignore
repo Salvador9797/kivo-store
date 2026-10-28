@@ -8,3 +8,7 @@ private-signing/
 *.apk
 *.idsig
 __pycache__/
+
+*.p12
+*.pfx
+/signing/
