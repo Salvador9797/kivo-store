@@ -1,5 +1,5 @@
 plugins { id 'com.android.application' }
-android { namespace 'app.kivo.store'; compileSdk 35; defaultConfig { applicationId 'app.kivo.market'; minSdk 26; targetSdk 35; versionCode 20; versionName '0.9.13' }; compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 } }
+android { namespace 'app.kivo.store'; compileSdk 35; defaultConfig { applicationId 'app.kivo.market'; minSdk 26; targetSdk 35; versionCode 21; versionName '0.9.14' }; compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 } }
 
 def sanitizedManifest = layout.buildDirectory.file('kivo-manifest/AndroidManifest.xml').get().asFile
 sanitizedManifest.parentFile.mkdirs()

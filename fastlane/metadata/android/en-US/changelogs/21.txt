@@ -1,0 +1,1 @@
+Package-based catalog grouping preserves new projects and recent releases. Typo correction and search suggestions. Source selector, update notes and download sizes. Clearer download failure reasons and retry handling. Icon fallbacks and screenshot retries. Local theme, text size, contrast and reduced-motion settings. No personalized recommendations.
