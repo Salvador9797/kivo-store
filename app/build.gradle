@@ -3,5 +3,5 @@ android { namespace 'app.kivo.store'; compileSdk 35; defaultConfig { application
 
 def sanitizedManifest = layout.buildDirectory.file('kivo-manifest/AndroidManifest.xml').get().asFile
 sanitizedManifest.parentFile.mkdirs()
-sanitizedManifest.text = file('src/main/AndroidManifest.xml').text.replace(' package="app.kivo.market"', '')
+sanitizedManifest.text = file('src/main/AndroidManifest.xml').text.replace(' package="app.kivo.market"', '').replaceAll(/<uses-sdk\b[^>]*\/>/, '')
 android.sourceSets.main.manifest.srcFile sanitizedManifest

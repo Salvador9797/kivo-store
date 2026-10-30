@@ -45,3 +45,11 @@ jobs:
           grep -Fx 'distributionSha256Sum=21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607' gradle/wrapper/gradle-wrapper.properties
       - uses: gradle/actions/setup-gradle@v5
       - run: bash gradlew :app:assembleDebug :app:assembleRelease --no-daemon
+      - name: Verificar identidad y compatibilidad de ambos APK
+        run: |
+          for apk in app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk; do
+            "$ANDROID_HOME/build-tools/36.0.0/aapt2" dump badging "$apk" > /tmp/kivo-badging.txt
+            grep "package: name='app.kivo.market' versionCode='20' versionName='0.9.13'" /tmp/kivo-badging.txt
+            grep -Fx "sdkVersion:'26'" /tmp/kivo-badging.txt
+            grep -Fx "targetSdkVersion:'35'" /tmp/kivo-badging.txt
+          done
