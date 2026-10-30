@@ -1,7 +1,7 @@
 name: Comprobaciones
 on:
   push:
-    branches: [main, 'maintenance/**']
+    branches: [main, 'maintenance/**', 'feature/**']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -17,7 +17,7 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm test
-      - run: node tests/search-intent.cjs && node tests/izzy-loading.cjs && node tests/approved-design.cjs && node tests/download-progress.cjs
+      - run: node tests/search-intent.cjs && node tests/izzy-loading.cjs && node tests/approved-design.cjs && node tests/download-progress.cjs && node tests/catalog-experience.cjs
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
@@ -25,9 +25,10 @@ jobs:
       - name: Comprobar versiones y programación del catálogo
         run: |
           mkdir -p /tmp/kivo-tests
-          javac -d /tmp/kivo-tests app/src/main/java/app/kivo/store/Versions.java app/src/main/java/app/kivo/store/UpdatePolicy.java app/src/main/java/app/kivo/store/CatalogSchedule.java tests/SelectedVersionTest.java tests/CatalogScheduleTest.java
+          javac -d /tmp/kivo-tests app/src/main/java/app/kivo/store/Versions.java app/src/main/java/app/kivo/store/UpdatePolicy.java app/src/main/java/app/kivo/store/CatalogSchedule.java tests/SelectedVersionTest.java tests/CatalogScheduleTest.java app/src/main/java/app/kivo/store/DownloadReason.java tests/DownloadReasonTest.java
           java -cp /tmp/kivo-tests app.kivo.store.SelectedVersionTest
           java -cp /tmp/kivo-tests app.kivo.store.CatalogScheduleTest
+          java -cp /tmp/kivo-tests app.kivo.store.DownloadReasonTest
   android:
     runs-on: ubuntu-latest
     steps:
@@ -49,7 +50,14 @@ jobs:
         run: |
           for apk in app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk; do
             "$ANDROID_HOME/build-tools/36.0.0/aapt2" dump badging "$apk" > /tmp/kivo-badging.txt
-            grep "package: name='app.kivo.market' versionCode='20' versionName='0.9.13'" /tmp/kivo-badging.txt
+            grep "package: name='app.kivo.market' versionCode='21' versionName='0.9.14'" /tmp/kivo-badging.txt
             grep -Fx "minSdkVersion:'26'" /tmp/kivo-badging.txt
             grep -Fx "targetSdkVersion:'35'" /tmp/kivo-badging.txt
           done
+      - name: Guardar APK sin firma para validación
+        uses: actions/upload-artifact@v7
+        with:
+          name: kivo-unsigned-release
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          retention-days: 7
+          if-no-files-found: error
