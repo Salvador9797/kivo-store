@@ -1,7 +1,7 @@
 name: Comprobaciones
 on:
   push:
-    branches: [main]
+    branches: [main, 'maintenance/**']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -10,8 +10,8 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: npm
@@ -31,17 +31,25 @@ jobs:
   android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v4
         with:
-          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+          packages: 'platform-tools platforms;android-35 build-tools;36.0.0'
       - name: Verificar wrapper y distribución de Gradle
         run: |
-          echo '498495120a03b9a6ab5d155f5de3c8f0d986a449153702fb80fc80e134484f17  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check
-          grep -Fx 'distributionSha256Sum=d725d707bfabd4dfdc958c624003b3c80accc03f7037b5122c4b1d0ef15cecab' gradle/wrapper/gradle-wrapper.properties
+          echo '3b8a25775a69158b5ad2b1d17a80a88dc7b40a352a73eb27d06c612a7ce68e98  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check
+          grep -Fx 'distributionSha256Sum=21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607' gradle/wrapper/gradle-wrapper.properties
       - uses: gradle/actions/setup-gradle@v5
       - run: bash gradlew :app:assembleDebug :app:assembleRelease --no-daemon
+      - name: Verificar identidad y compatibilidad de ambos APK
+        run: |
+          for apk in app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk; do
+            "$ANDROID_HOME/build-tools/36.0.0/aapt2" dump badging "$apk" > /tmp/kivo-badging.txt
+            grep "package: name='app.kivo.market' versionCode='20' versionName='0.9.13'" /tmp/kivo-badging.txt
+            grep -Fx "minSdkVersion:'26'" /tmp/kivo-badging.txt
+            grep -Fx "targetSdkVersion:'35'" /tmp/kivo-badging.txt
+          done
