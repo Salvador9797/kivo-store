@@ -18,7 +18,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm test
       - run: node tests/search-intent.cjs && node tests/izzy-loading.cjs && node tests/approved-design.cjs && node tests/download-progress.cjs
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
