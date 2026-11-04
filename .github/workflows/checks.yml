@@ -44,7 +44,7 @@ jobs:
         run: |
           echo '3b8a25775a69158b5ad2b1d17a80a88dc7b40a352a73eb27d06c612a7ce68e98  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check
           grep -Fx 'distributionSha256Sum=21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607' gradle/wrapper/gradle-wrapper.properties
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
       - run: bash gradlew :app:assembleDebug :app:assembleRelease --no-daemon
       - name: Verificar identidad y compatibilidad de ambos APK
         run: |
