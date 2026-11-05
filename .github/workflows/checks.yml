@@ -53,7 +53,7 @@ jobs:
         run: |
           for apk in app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk; do
             "$ANDROID_HOME/build-tools/36.0.0/aapt2" dump badging "$apk" > /tmp/kivo-badging.txt
-            grep "package: name='app.kivo.market' versionCode='23' versionName='0.9.16'" /tmp/kivo-badging.txt
+            grep "package: name='app.kivo.market' versionCode='24' versionName='0.9.17'" /tmp/kivo-badging.txt
             grep -Fx "minSdkVersion:'26'" /tmp/kivo-badging.txt
             grep -Fx "targetSdkVersion:'35'" /tmp/kivo-badging.txt
           done
