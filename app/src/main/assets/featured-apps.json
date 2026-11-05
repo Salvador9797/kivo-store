@@ -1,0 +1,27 @@
+[
+  {
+    "repo": "Salvador9797/Anira",
+    "name": "Anira",
+    "description": "Tu próxima historia: descubre anime y organiza tus series favoritas.",
+    "source": "github",
+    "topics": [
+      "Anime",
+      "Video"
+    ],
+    "package": "app.anira.anime",
+    "indexed": true,
+    "assets": []
+  },
+  {
+    "repo": "Salvador9797/kivo-store",
+    "name": "Kivo Store",
+    "description": "Descubre, descarga y actualiza tus apps en un solo lugar.",
+    "source": "github",
+    "topics": [
+      "App Store"
+    ],
+    "package": "app.kivo.market",
+    "indexed": true,
+    "assets": []
+  }
+]

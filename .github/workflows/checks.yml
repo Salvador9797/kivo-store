@@ -25,10 +25,13 @@ jobs:
       - name: Comprobar versiones y programación del catálogo
         run: |
           mkdir -p /tmp/kivo-tests
-          javac -d /tmp/kivo-tests app/src/main/java/app/kivo/store/Versions.java app/src/main/java/app/kivo/store/UpdatePolicy.java app/src/main/java/app/kivo/store/CatalogSchedule.java tests/SelectedVersionTest.java tests/CatalogScheduleTest.java app/src/main/java/app/kivo/store/DownloadReason.java tests/DownloadReasonTest.java
+          javac -d /tmp/kivo-tests app/src/main/java/app/kivo/store/Versions.java app/src/main/java/app/kivo/store/UpdatePolicy.java app/src/main/java/app/kivo/store/CatalogSchedule.java tests/SelectedVersionTest.java tests/CatalogScheduleTest.java app/src/main/java/app/kivo/store/DownloadReason.java tests/DownloadReasonTest.java app/src/main/java/app/kivo/store/InstallQueue.java tests/InstallQueueTest.java app/src/main/java/app/kivo/store/AbiNames.java tests/AbiNamesTest.java app/src/main/java/app/kivo/store/DownloadLifecycle.java tests/DownloadLifecycleTest.java
           java -cp /tmp/kivo-tests app.kivo.store.SelectedVersionTest
           java -cp /tmp/kivo-tests app.kivo.store.CatalogScheduleTest
           java -cp /tmp/kivo-tests app.kivo.store.DownloadReasonTest
+          java -cp /tmp/kivo-tests app.kivo.store.InstallQueueTest
+          java -cp /tmp/kivo-tests app.kivo.store.AbiNamesTest
+          java -cp /tmp/kivo-tests app.kivo.store.DownloadLifecycleTest
   android:
     runs-on: ubuntu-latest
     steps:
@@ -50,7 +53,7 @@ jobs:
         run: |
           for apk in app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk; do
             "$ANDROID_HOME/build-tools/36.0.0/aapt2" dump badging "$apk" > /tmp/kivo-badging.txt
-            grep "package: name='app.kivo.market' versionCode='21' versionName='0.9.14'" /tmp/kivo-badging.txt
+            grep "package: name='app.kivo.market' versionCode='23' versionName='0.9.16'" /tmp/kivo-badging.txt
             grep -Fx "minSdkVersion:'26'" /tmp/kivo-badging.txt
             grep -Fx "targetSdkVersion:'35'" /tmp/kivo-badging.txt
           done

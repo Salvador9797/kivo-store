@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),fs=require('fs'),{JSDOM,VirtualConsole}=require('jsdom');
+const calls=[],errors=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
+const dom=new JSDOM(fs.readFileSync('app/src/main/assets/index.html','utf8'),{url:'https://kivo.local/',runScripts:'dangerously',virtualConsole:vc,beforeParse(w){w.matchMedia=()=>({matches:false});w.scrollTo=()=>{};w.confirm=()=>true;w.KivoNative=new Proxy({},{get:(_,k)=>(...a)=>calls.push([k,...a])});}});
+const w=dom.window,d=w.document;w.KivoReceive('directory',[]);
+assert.equal(d.querySelectorAll('.promoted-card').length,2,'Both apps remain available before network loads');
+assert.equal(d.querySelectorAll('.fresh-section').length,2,'Normal discovery feeds remain');
+const initial=[...d.querySelectorAll('.promoted-card')].map(b=>b.textContent);assert(initial[0].includes('Anira'));assert(initial[1].includes('Kivo Store'));assert(!initial.some(s=>s.includes('Actualización disponible')));
+w.KivoReceive('catalog',[{repo:'Salvador9797/Anira',name:'Anira',version:'v0.12.2',available:true,assets:[{id:91,name:'Anira.apk',size:1000}]}]);assert.match(d.querySelector('.promoted-card').textContent,/v0.12.2/);
+d.querySelector('.promoted-card').click();assert(d.querySelector('.detail-title'));assert(calls.some(x=>x[0]==='inspectInstalled'&&x[1]==='Salvador9797/Anira'));assert(!d.querySelector('.promoted-section'));
+w.KivoBack();d.querySelector('#search').value='music';d.querySelector('#search').dispatchEvent(new w.Event('input',{bubbles:true}));assert(!d.querySelector('.promoted-section'));
+w.KivoBack();w.KivoReceive('catalog',[{repo:'Salvador9797/Anira',name:'Anira',version:'v0.12.3',available:true,assets:[{id:92,name:'Anira.apk',size:1001}]}]);assert.match(d.querySelector('.promoted-card').textContent,/v0.12.3/);
+assert.equal(errors.length,0,errors.join('\n'));dom.window.close();console.log('PASS: pinned cards, offline fallback, release changes, detail navigation, preserved feeds and unobstructed search.');

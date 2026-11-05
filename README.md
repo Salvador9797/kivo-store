@@ -4,11 +4,32 @@
 
 Una tienda de aplicaciones para Android que reúne F-Droid, IzzyOnDroid y proyectos de GitHub en una interfaz sencilla.
 
-**Versión: 0.9.14 · Android 8.0 o posterior · app.kivo.market**
+**Versión del código: 0.9.16 · Android 8.0 o posterior · app.kivo.market**
 
 ## Descarga
 
 El APK firmado se publica en [Releases](https://github.com/Salvador9797/kivo-store/releases). Las instalaciones y actualizaciones requieren la confirmación de Android.
+
+## Cambios en 0.9.16
+
+Al desinstalar una aplicación, su ficha vuelve a ofrecer Descargar aunque exista un APK anterior guardado. El historial ya no bloquea una descarga nueva. Se conserva la opción Instalar para una descarga nueva cuya instalación quedó pendiente. Los registros antiguos completados y sin instalación presente pasan a historial al migrar.
+
+## Cambios en 0.9.15
+
+- Al terminar una descarga, se comprueba el APK y se abre la confirmación de instalación de Android sin cambiar a Descargas.
+- Confirmaciones en cola, cancelación sin bucles y notificación que continúa directamente con el archivo correcto.
+- Abrir y Actualizar disponibles a la vez; corrección de variantes ARMv7 y ARM64.
+- Acceso al catálogo de GitHub sin solicitar escritura; autorización separada para publicar reseñas.
+- Política de scripts con hashes y generación de la interfaz desde una sola fuente.
+
+[Alcance, comprobaciones y pendientes](docs/INSTALLATION_FLOW_0.9.15.md). La actualización firmada y las pruebas en dispositivo siguen pendientes.
+
+## Cambios en 0.9.17
+
+- Sección fija «Nuestras apps» en Inicio para Anira y Kivo Store, debajo de las novedades y sin elementos flotantes.
+- Fichas con iconos oficiales y versión publicada; consulta de sus lanzamientos cada hora al usar o volver a Kivo, sujeta a conexión y límites de GitHub.
+- Se conservan la instalación directa y las mejoras de 0.9.15 y 0.9.16: volver a descargar tras desinstalar, cola de instalación y validación del APK.
+- La APK conserva la firma de 0.9.16 y usa versionCode 24.
 
 ## Cambios en 0.9.14
 

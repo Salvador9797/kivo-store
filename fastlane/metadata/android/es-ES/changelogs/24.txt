@@ -1,0 +1,1 @@
+Nuestras apps: Anira y Kivo Store destacadas en Inicio, con acceso a sus fichas y novedades. Se comprueban sus publicaciones al usar Kivo. Conserva la descarga después de desinstalar y las mejoras de instalación directa.

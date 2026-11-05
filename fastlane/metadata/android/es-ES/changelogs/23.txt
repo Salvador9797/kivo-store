@@ -1,0 +1,1 @@
+Al desinstalar una app, Kivo vuelve a mostrar Descargar aunque conserve el APK anterior. Se permite descargar de nuevo sin borrar el historial. Las descargas nuevas pendientes mantienen Instalar.

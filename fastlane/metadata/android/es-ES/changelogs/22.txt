@@ -1,0 +1,1 @@
+Instalación directa tras descargar y comprobar el APK. Confirmaciones en cola y cancelación sin bucles. Abrir y Actualizar a la vez. Mejor selección ARM. Acceso GitHub de catálogo separado de reseñas. Refuerzo de seguridad de la interfaz.
